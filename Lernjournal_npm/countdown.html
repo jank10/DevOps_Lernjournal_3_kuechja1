@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        /* Funky CSS styling */
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding-top: 50px; /* Adjusted for centering */
+        }
+
+        #countdown {
+            font-size: 48px;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #ffcc00;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            display: inline-block;
+        }
+
+        /* Description styling */
+        #description {
+            font-size: 24px;
+            margin-bottom: 20px; /* Adjusted to create space */
+        }
+    </style>
+</head>
+<body>
+    <!-- Description of countdown -->
+    <div id="description">Countdown bis zur Abgabe des DevOps Lernjournals</div>
+
+    <!-- user name -->
+    <div id="description">von Jan Küchli (kuechja1)</div>
+
+    <!-- Target date -->
+    <div id="targetDate">Abgabedatum: 26. Mai 2024</div>
+
+    <!-- Countdown display -->
+    <div id="countdown"></div>
+
+    <!-- Include Day.js library -->
+    <script src="node_modules/dayjs/dayjs.min.js"></script>
+    <!-- Include Day.js duration plugin -->
+    <script src="node_modules/dayjs/plugin/duration.js"></script>
+
+    <!-- JavaScript code for the countdown timer -->
+    <script>
+        // Extend dayjs with the duration plugin
+        dayjs.extend(window.dayjs_plugin_duration);
+
+        // Function to calculate countdown
+        function countdown(targetDate) {
+            // Calculate the difference between target date and current date
+            const now = dayjs();
+            const target = dayjs(targetDate);
+            const duration = target.diff(now, 'second');
+
+            // Convert duration to days, hours, minutes, and seconds
+            const days = Math.floor(duration / (24 * 60 * 60));
+            const hours = Math.floor((duration % (24 * 60 * 60)) / (60 * 60));
+            const minutes = Math.floor((duration % (60 * 60)) / 60);
+            const seconds = duration % 60;
+
+            // Return the countdown as an object
+            return {
+                days,
+                hours,
+                minutes,
+                seconds
+            };
+        }
+
+        // Function to format countdown values
+        function formatCountdownValue(value) {
+            // Pad single-digit values with leading zero
+            return value < 10 ? `0${value}` : `${value}`;
+        }
+
+        // Function to display countdown
+        function displayCountdown(countdown) {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.innerHTML = `${formatCountdownValue(countdown.days)} Tage, ${formatCountdownValue(countdown.hours)} Stunden, ${formatCountdownValue(countdown.minutes)} Minuten, ${formatCountdownValue(countdown.seconds)} Sekunden`;
+        }
+
+        // Target date for the countdown (e.g., '2024-12-31 23:59:59')
+        const targetDate = '2024-05-26 23:59:59';
+
+        // Update the countdown every second
+        setInterval(() => {
+            const countdownValues = countdown(targetDate);
+            displayCountdown(countdownValues);
+        }, 1000);
+    </script>
+</body>
+</html>
